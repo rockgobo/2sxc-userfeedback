@@ -1,6 +1,7 @@
 @inherits Custom.Hybrid.Razor14
 @* This inherits statement gets you features like App, CmsContext, Data etc. - you can delete this comment *@
 @using ToSic.Sxc.Services; @* Make it easier to use https://r.2sxc.org/services *@
+@using ToSic.Razor.Blade;
 
 @{
     var title = Page.Title;
@@ -24,12 +25,12 @@
 }
 
 <div id="feedback">
-    <aside id="feedback__details" class="feedback__details--hide mb-1">
+    <aside id="feedback__details" class="feedback__details--hide mb-2">
         @foreach(var feedback in feedbacks) {
-            <article class="feedback__details">
+            <article class="feedback__detail">
                 <div>
                     <header>@feedback.EntityTitle</header>
-                    <p>@feedback.Description</p>
+                    @Html.Raw(feedback.Description)
                 </div>
                 <div>                    
                     @toolbarFeedback.For(feedback)
@@ -59,6 +60,7 @@
         flex-direction: column;
         justify-content: flex-end;
         align-items: flex-end;
+        z-index: 2000;
     }
 
     #feedback .sc-menu a div,
@@ -80,26 +82,35 @@
     }
 
     #feedback__details {
-        min-width: 320px;
-        padding: 10px;
+        width: 25vw;
+        padding: 20px;
         background-color: white;
         box-shadow: 5px 5px 5px #ccc;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        transition: transform 0.5s;
     }
 
     .feedback__details--hide {
-        display: none;
+        transform: translateX(calc(25vw + 10px));
     }
 
-    .feedback__details {
+    .feedback__detail {
         display: grid;
         grid-template-columns: 1fr 48px;
+        gap:20px;
     }
 
-    #feedback .sc-menu .feedback__details a div {
+    #feedback .sc-menu .feedback__detail a div {
         height: 28px !important;
         width: 28px !important;
         border-radius: 14px;
         font-size: 15px;
         background-color: var(--blue);
+    }
+
+    .feedback__detail header{
+        font-weight: bold;
     }
 </style>
