@@ -1,0 +1,105 @@
+@inherits Custom.Hybrid.Razor14
+@* This inherits statement gets you features like App, CmsContext, Data etc. - you can delete this comment *@
+@using ToSic.Sxc.Services; @* Make it easier to use https://r.2sxc.org/services *@
+
+@{
+    var title = Page.Title;
+    var user = CmsContext.User.Username;
+    var url = Request.Url.AbsoluteUri;
+    var tabId = CmsContext.Page.Id;
+    var parameters = CmsContext.Page.Parameters.ToString();
+    var uiSvgIconColored = new {
+        Icon = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><path d='M256 32C114.6 32 0 125.1 0 240c0 47.6 19.9 91.2 52.9 126.3C38 405.7 7 439.1 6.5 439.5c-6.6 7-8.4 17.2-4.6 26S14.4 480 24 480c61.5 0 110-25.7 139.1-46.3C192 442.8 223.2 448 256 448c141.4 0 256-93.1 256-208S397.4 32 256 32zm0 368c-26.7 0-53.1-4.1-78.4-12.1l-22.7-7.2-19.5 13.8c-14.3 10.1-33.9 21.4-57.5 29 7.3-12.1 14.4-25.7 19.9-40.2l10.6-28.1-20.6-21.8C69.7 314.1 48 282.2 48 240c0-88.2 93.3-160 208-160s208 71.8 208 160-93.3 160-208 160z'/></svg>",
+        color = "var(--magenta)"
+    };
+    var toolbar = Kit.Toolbar.Empty()
+                        .New("Feedback", ui: uiSvgIconColored, prefill: "PageTitle="+title+"&Page="+url+"&User="+user+"&PageId="+tabId+"&=Parameters="+parameters)
+                        .Settings(show: "always").AsTag();
+    var toolbarFeedback = Kit.Toolbar.Empty().Edit().Settings(show: "always").AsTag();
+
+    // Fetch all Comments for this Site
+    var feedbackQuery = App.Query["FeedbackByPageId"]; 
+    feedbackQuery.Params("PageId", tabId.ToString()); 
+    var feedbacks =  AsList(feedbackQuery["Default"] as object); 
+}
+
+<div id="feedback">
+    <aside id="feedback__details" class="feedback__details--hide mb-1">
+        @foreach(var feedback in feedbacks) {
+            <article class="feedback__details">
+                <div>
+                    <header>@feedback.EntityTitle</header>
+                    <p>@feedback.Description</p>
+                </div>
+                <div>                    
+                    @toolbarFeedback.For(feedback)
+                </div>
+            </article>
+        }
+    </aside>
+    @if(feedbacks.Count() > 0 ) {
+        <div class="feedback__button mb-1" onclick="toogleDetails()">@feedbacks.Count()</div>
+    }
+    <div @toolbar> Test</div>
+</div>
+
+<script>
+    toogleDetails = function() {
+        var details = document.getElementById("feedback__details");
+        details.classList.toggle('feedback__details--hide');
+    }
+</script>
+
+<style>
+    #feedback {
+        position: fixed;
+        right: 20px;
+        bottom: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: flex-end;
+    }
+
+    #feedback .sc-menu a div,
+    .feedback__button {
+        height: 48px !important;
+        width: 48px !important;
+        border-radius: 24px;
+        font-size: 20px;
+        background-color: var(--magenta);
+        box-shadow: 0 1px 3px rgb(0 0 0 / 12%), 0 1px 2px rgb(0 0 0 / 24%);
+    }
+
+    .feedback__button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        cursor: pointer;
+    }
+
+    #feedback__details {
+        min-width: 320px;
+        padding: 10px;
+        background-color: white;
+        box-shadow: 5px 5px 5px #ccc;
+    }
+
+    .feedback__details--hide {
+        display: none;
+    }
+
+    .feedback__details {
+        display: grid;
+        grid-template-columns: 1fr 48px;
+    }
+
+    #feedback .sc-menu .feedback__details a div {
+        height: 28px !important;
+        width: 28px !important;
+        border-radius: 14px;
+        font-size: 15px;
+        background-color: var(--blue);
+    }
+</style>
