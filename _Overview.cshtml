@@ -1,0 +1,26 @@
+@inherits Custom.Hybrid.Razor14
+@* This inherits statement gets you features like App, CmsContext, Data etc. - you can delete this comment *@
+@using ToSic.Sxc.Services; @* Make it easier to use https://r.2sxc.org/services *@
+@using ToSic.Razor.Blade;
+
+<table class="table">
+    @foreach(var feedback in AsList(Data)) {
+        <tr @Edit.TagToolbar(feedback)>
+            <td >
+                @feedback.EntityTitle
+            </td>
+            <td >
+                @feedback.Created
+            </td>
+            <td >
+                @Html.Raw(feedback.Description)
+            </td>
+            <td>
+                @feedback.IsSolved
+            </td>
+            <td >
+                <a href="@feedback.Page">@feedback.Page</a>
+            </td>
+        </tr>
+    }
+</table>
