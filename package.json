@@ -1,0 +1,22 @@
+{
+  "name": "lifbi.2sxc.visualfeedback",
+  "version": "1.0.0",
+  "description": "App to collect user feedback from websites. Inspired by visual feedback tools like heurio, we needed a way to\r collect direct user feedback as easy as possible without the hurdle to install a plugin.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rockgobo/2sxc-userfeedback.git"
+  },
+  "author": "Christian Matyas",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rockgobo/2sxc-userfeedback/issues"
+  },
+  "homepage": "https://github.com/rockgobo/2sxc-userfeedback#readme",
+  "dependencies": {
+    "html2canvas": "^1.4.1"
+  }
+}

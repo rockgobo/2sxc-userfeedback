@@ -32,7 +32,7 @@
                     <header>@feedback.EntityTitle</header>
                     @Html.Raw(feedback.Description)
                 </div>
-                <div>                    
+                <div>
                     @toolbarFeedback.For(feedback)
                 </div>
             </article>
@@ -44,12 +44,33 @@
     <div @toolbar> Test</div>
 </div>
 
+<aside>
+    <img id="result"/>
+</aside>
+
 <script>
     toogleDetails = function() {
         var details = document.getElementById("feedback__details");
         details.classList.toggle('feedback__details--hide');
     }
+
+    const capture = () => {
+        const screenshotTarget = document.body;
+
+        html2canvas(screenshotTarget).then((canvas) => {
+            const base64image = canvas.toDataURL("image/png");
+            setResult(base64image);
+        });
+    }
+
+    const setResult = (image) => {
+        document.getElementById('result').src = image;
+    }
+
+    capture();
 </script>
+
+<script src="@App.Path/dist/html2canvas.min.js" @Kit.Page.AssetAttributes()></script>
 
 <style>
     #feedback {
